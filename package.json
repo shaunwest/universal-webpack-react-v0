@@ -1,0 +1,47 @@
+{
+  "name": "universal-webpack-react-redux",
+  "version": "1.0.0",
+  "description": "Universal Webpack React Redux",
+  "main": "builder/start.js",
+  "scripts": {
+    "start": "BABEL_CACHE_PATH=\"./.babel-cache.json\" NODE_PATH=\"./src\" node ./builder/start",
+    "client": "node ./node_modules/webpack/bin/webpack.js --verbose --colors --display-error-details --config ./builder/webpack-client",
+    "watch": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --config ./builder/webpack-client",
+    "foo": "node ./builder/webpack",
+    "server-xp": "node ./builder/start",
+    "foo2": "node ./builder/webpack-dev-server"
+  },
+  "author": "Shaun West",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^6.3.26",
+    "babel-core": "^6.4.0",
+    "babel-polyfill": "^6.3.14",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-0": "^6.3.13",
+    "history": "^2.0.0-rc2",
+    "isomorphic-fetch": "^2.2.0",
+    "koa": "^1.1.2",
+    "koa-body": "^1.4.0",
+    "koa-static": "^2.0.0",
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6",
+    "react-redux": "^4.0.6",
+    "react-router": "^1.0.3",
+    "redux": "^3.0.5",
+    "redux-devtools": "^3.0.1",
+    "redux-logger": "^2.3.2",
+    "redux-thunk": "^1.0.3"
+  },
+  "devDependencies": {
+    "babel-loader": "^6.2.1",
+    "colors": "^1.1.2",
+    "css-loader": "^0.23.1",
+    "piping": "^0.3.0",
+    "react-hot-loader": "^1.3.0",
+    "style-loader": "^0.13.0",
+    "webpack": "^1.12.11",
+    "webpack-dev-server": "^1.14.1"
+  }
+}

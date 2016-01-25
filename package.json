@@ -4,12 +4,7 @@
   "description": "Universal Webpack React Redux",
   "main": "builder/start.js",
   "scripts": {
-    "start": "BABEL_CACHE_PATH=\"./.babel-cache.json\" NODE_PATH=\"./src\" node ./builder/start",
-    "client": "node ./node_modules/webpack/bin/webpack.js --verbose --colors --display-error-details --config ./builder/webpack-client",
-    "watch": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --config ./builder/webpack-client",
-    "foo": "node ./builder/webpack",
-    "server-xp": "node ./builder/start",
-    "foo2": "node ./builder/webpack-dev-server"
+    "start": "BABEL_CACHE_PATH=\"./.babel-cache.json\" NODE_PATH=\"./src\" node ./builder/start"
   },
   "author": "Shaun West",
   "license": "ISC",

@@ -1,27 +1,45 @@
-var log = require('./log.js');
+/*
+ * start.js
+ * this is the master script for starting and watching builds
+ */
+
+var xconsole = require('./xconsole.js');
 var banner = require('./banner.js');
-//var runServer = require('./babel.js');
-
+var devServer;
 var APP_ROOT = '..';
-var isChildProcess;
 
+// We're in server mode
 global.__SERVER__ = true;
 
+// If in prod mode, just start the babel server
 if (process.env.NODE_ENV === 'prod') {
-    //runServer();
-} else {
-    isChildProcess = require('piping')({
-        main: './builder/babel.js',
-        hook: true,
-        includeModules: false
-    });
+    require('./start-babel-server.js');
+}
+else {
+    // Show a banner!
+    banner();
 
-    if (isChildProcess) {
-        //runServer();
-        log.out('helllooo!');
-    } else {
-        banner();
-        require(APP_ROOT + '/builder/webpack-dev-server');
-        log.out('🐠  Spawning a dev server... 🐠 ');
+    xconsole.success('Hello! Hit Ctrl+C to exit at any time.');
+
+    // Start the webpack dev server
+    devServer = require(APP_ROOT + '/builder/webpack-dev-server');
+
+    if (devServer) {
+        devServer(
+            function onCompile() {
+                xconsole.success('Compile finished.');
+
+                // Spawn a new babel server process
+                // Piping will watch for changes and relaunch the server
+                require('piping')({
+                    main: './builder/start-babel-server.js',
+                    hook: true,
+                    includeModules: false
+                });
+              },
+            function onWatching() {
+                xconsole.success('Watching for changes.');
+            }
+        );
     }
 }

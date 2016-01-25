@@ -5,3 +5,4 @@ dist/
 *.map
 *.swp
 .DS_Store
+.babel-cache.json

@@ -5,7 +5,7 @@ import serve from 'koa-static';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
-import log from '../builder/log';
+import xconsole from '../builder/xconsole';
 import foo from './foo';
 
 const app = koa();
@@ -43,4 +43,4 @@ app.use(function *() {
     });
 });
 
-app.listen(port, () => log.go('Server is listening @ http://%s:%s', hostname, port));
+app.listen(port, () => xconsole.go('Server is listening @ http://%s:%s', hostname, port));

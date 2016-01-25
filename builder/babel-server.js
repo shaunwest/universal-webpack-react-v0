@@ -1,10 +1,12 @@
-var log = require('./log.js');
+var xconsole = require('./xconsole.js');
 
 var BABEL_PRESETS = ['es2015', 'react', 'stage-0'],
     APP_ROOT = '..';
 
-function runServer() {
-    log.activity('One moment');
+function babelServer() {
+    xconsole.activity('Starting dev server');
+
+    global.__SERVER__ = true;
 
     try {
         require('babel-polyfill');
@@ -19,5 +21,4 @@ function runServer() {
     }
 }
 
-//module.exports = runServer;
-runServer();
+module.exports = babelServer;

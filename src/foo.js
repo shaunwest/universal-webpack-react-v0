@@ -2,8 +2,11 @@ import React from 'react';
 
 export default class Foo extends React.Component {
   render() {
+    console.log(__SERVER__);
     return(
-      <p>FOOO!!!!!</p>
+      <ul>
+      <li>FOOO!!!</li>
+      </ul>
     );
   }
 }

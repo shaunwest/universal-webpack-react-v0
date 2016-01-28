@@ -1,10 +1,13 @@
-var xconsole = require('./xconsole.js');
+var format = require('./format.js');
+var args = require('./args.js')(process.argv);
+
+var externalCss = args.linkcss;
 
 var BABEL_PRESETS = ['es2015', 'react', 'stage-0'],
     APP_ROOT = '..';
 
 function babelServer() {
-    xconsole.activity('Starting dev server');
+    console.log(format.activity('Starting dev server'));
 
     global.__SERVER__ = true;
 
@@ -14,7 +17,7 @@ function babelServer() {
             only: /src/,
             presets: BABEL_PRESETS
         });
-        require(APP_ROOT + '/src/server');
+        require(APP_ROOT + '/src/server')(externalCss);
     }
     catch (error) {
         console.error(error.stack);

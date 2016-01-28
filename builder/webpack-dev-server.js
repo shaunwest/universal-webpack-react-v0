@@ -1,14 +1,15 @@
 var WebpackDevServer = require('webpack-dev-server');
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var config = require('./webpack-client');
-var xconsole = require('./xconsole');
+var format = require('./format');
 
 var hostname = process.env.WEBPACK_HOSTNAME || 'localhost';
 var port = process.env.WEBPACK_PORT || 8080;
 var serverUrl = 'http://' + hostname + ':' + port;
 
 function runWebpackCompile(cb) {
-    xconsole.activity('Compiling');
+    console.log(format.activity('Compiling'));
     webpack(config)
         .run(function(err, stats) {
             if (cb) {
@@ -20,7 +21,7 @@ function runWebpackCompile(cb) {
         });
 }
 
-function runWebpackServer(cb) {
+function runWebpackServer(options, cb) {
     var server, serverCompiler;
 
     config.debug = true;
@@ -31,13 +32,20 @@ function runWebpackServer(cb) {
 
     config.output.publicPath = serverUrl + '/dist/';
 
+    // TODO: figure out what exactly this does
     //config.output.hotUpdateMainFilename = 'update/[hash]/update.json';
     //config.output.hotUpdateChunkFilename = 'update/[hash]/[id].update.js';
 
     config.plugins = [
         new webpack.DefinePlugin({ __SERVER__: false }),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new ExtractTextPlugin('style.css')
     ];
+
+    // If not linking external css, use the webpack import method (which will hotload css changes)
+    if (!options.externalCss) {
+        config.module.loaders[0] = { test: /\.scss$/, loaders: ['style', 'css', 'sass'] };
+    }
 
     config.module.postLoaders = [
         { test: /\.js$/, loaders: ['react-hot'], exclude: /node_modules/ }
@@ -55,7 +63,7 @@ function runWebpackServer(cb) {
         filename: 'client.js',
         watchOptions: {
             aggregateTimeout: 300,
-            poll: 1000
+            poll: 500
         },
         publicPath: serverUrl + '/dist/',
         headers: {'Access-Control-Allow-Origin': '*'},
@@ -73,14 +81,14 @@ function runWebpackServer(cb) {
     });
 }
 
-function start(onCompiled, onListening) {
+function start(options, onCompiled, onListening) {
     function startWebpackServer() {
         try {
-            runWebpackServer(onListening);
+            runWebpackServer(options, onListening);
         }
         catch(error) {
-            xconsole.warn('We\'re not gonna be able to watch for changes because of an error with webpack-dev-server.js.');
-            xconsole.warn(error.stack);
+            console.log(format.warn('We\'re not gonna be able to watch for changes because of an error with webpack-dev-server.js.'));
+            console.log(format.warn(error.stack));
         }
     }
 
@@ -91,7 +99,7 @@ function start(onCompiled, onListening) {
         });
     }
     catch(error) {
-        xconsole.error('Looks like something\'s wrong with your webpack-client.js configuration: ' + error.stack);
+        console.log(format.error('Looks like something\'s wrong with your webpack-client.js configuration: ' + error.stack));
     }
 }
 

@@ -8,15 +8,11 @@
 var colors = require('colors');
 
 // save original console logging functions
-var log = Function.prototype.bind.call(console.log, console);
 var info = Function.prototype.bind.call(console.info, console);
+var error = Function.prototype.bind.call(console.error, console);
 
-// wrap console.log
-console.log = function (msg) {
-    var args = Array.prototype.slice.call(arguments, 1);
-    //args.unshift('😼  ' + msg);
-    args.unshift(msg);
-    log.apply(console, args);
+console.info = function () {
+    info.apply(console, arguments);
 };
 
 function out(msg, vars) {

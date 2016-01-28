@@ -3,10 +3,15 @@
  * this is the master script for starting and watching builds
  */
 
-var xconsole = require('./xconsole.js');
+var format = require('./format.js');
 var banner = require('./banner.js');
+var args = require('./args.js')(process.argv);
+
 var devServer;
+
 var APP_ROOT = '..';
+
+var externalCss = args.linkcss;
 
 // We're in server mode
 global.__SERVER__ = true;
@@ -19,27 +24,32 @@ else {
     // Show a banner!
     banner();
 
-    xconsole.success('Hello! Hit Ctrl+C to exit at any time.');
+    console.log(format.success('Hello! Hit Ctrl+C to exit at any time.'));
+
+    if (externalCss) {
+        console.log(format.link('External CSS linking is active.'));
+    }
 
     // Start the webpack dev server
     devServer = require(APP_ROOT + '/builder/webpack-dev-server');
 
     if (devServer) {
-        devServer(
-            function onCompile() {
-                xconsole.success('Compile finished.');
+        devServer({
+            externalCss: externalCss
+        },
+        function onCompile() {
+            console.log(format.success('Compile finished'));
 
-                // Spawn a new babel server process
-                // Piping will watch for changes and relaunch the server
-                require('piping')({
-                    main: './builder/start-babel-server.js',
-                    hook: true,
-                    includeModules: false
-                });
-              },
-            function onWatching() {
-                xconsole.success('Watching for changes.');
-            }
-        );
+            // Spawn a new babel server process
+            // Piping will watch for changes and relaunch the server
+            require('piping')({
+                main: './builder/start-babel-server.js',
+                hook: true,
+                includeModules: false
+            });
+          },
+        function onWatching() {
+            console.log(format.success('Watching for changes'));
+        });
     }
 }

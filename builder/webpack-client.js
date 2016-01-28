@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var path = require('path');
 
 var APP_ROOT = path.join(__dirname,  '/../');
@@ -20,18 +21,19 @@ module.exports = {
         //new webpack.DefinePlugin({ 'process.env': {NODE_ENV: '\'prod\''} }),
         new webpack.optimize.DedupePlugin(),
         //new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.optimize.UglifyJsPlugin()
+        new webpack.optimize.UglifyJsPlugin(),
+        new ExtractTextPlugin('style.css')
     ],
-    module:  {
+    module: {
         loaders: [
-            { test: /\.css$/, loaders: ['style', 'css'] },
+            { test: /\.scss$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader") },
             { test: /\.json$/, loaders: ['json'] },
             { test: /\.js$/, loaders: ['babel?cacheDirectory&presets[]=es2015&presets[]=react&presets[]=stage-0'], exclude: /node_modules/ }
         ],
         postLoaders: [],
         noParse: /\.min\.js/
     },
-    node:    {
+    node: {
         __dirname: true,
         fs: 'empty'
     }

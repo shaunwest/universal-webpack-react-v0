@@ -4,7 +4,8 @@
   "description": "Universal Webpack React Redux",
   "main": "builder/start.js",
   "scripts": {
-    "start": "BABEL_CACHE_PATH=\"./.babel-cache.json\" NODE_PATH=\"./src\" node ./builder/start"
+    "start": "BABEL_CACHE_PATH=\"./.babel-cache.json\" NODE_PATH=\"./src\" node ./builder/start",
+    "deploy": "BABEL_CACHE_PATH=\"./.babel-cache.json\" NODE_PATH=\"./src\" NODE_ENV=\"production\" node ./builder/start"
   },
   "author": "Shaun West",
   "license": "ISC",

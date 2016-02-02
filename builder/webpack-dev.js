@@ -1,7 +1,9 @@
 var WebpackDevServer = require('webpack-dev-server');
 var webpack = require('webpack');
+var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var config = require('./webpack-client');
+
+var config = require('./webpack-dev-config');
 var format = require('./format');
 
 var hostname = process.env.WEBPACK_HOSTNAME || 'localhost';
@@ -32,10 +34,6 @@ function runWebpackServer(options, cb) {
 
     config.output.publicPath = serverUrl + '/dist/';
 
-    // TODO: figure out what exactly this does
-    //config.output.hotUpdateMainFilename = 'update/[hash]/update.json';
-    //config.output.hotUpdateChunkFilename = 'update/[hash]/[id].update.js';
-
     config.plugins = [
         new webpack.DefinePlugin({ __SERVER__: false }),
         new webpack.HotModuleReplacementPlugin(),
@@ -57,10 +55,8 @@ function runWebpackServer(options, cb) {
         hot: true,
         contentBase: '../static',
         inline: true,
-        // webpack-dev-middleware options
-        // FIXME: errors don't show on CLI in quite mode
-        quiet: true, // false = output stuff to console
-        noInfo: false, // false = output *boring* stuff to console 
+        quiet: false, // true = don't output anything to console, false = output it
+        noInfo: true, // hide output except for errors
         filename: 'client.js',
         watchOptions: {
             aggregateTimeout: 300,

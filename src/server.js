@@ -15,12 +15,13 @@ const hostname = process.env.HOSTNAME || 'localhost';
 const port = process.env.PORT || 1336;
 const appRoot = __dirname + '/..';
 
-function run(externalCss) {
+function run(externalCss, assetUrl = 'http://localhost:8080') {
   app.use(serve(appRoot + '/static', { defer: false }));
   app.use(koaBody({ multipart: true }));
 
   const cssLink = (externalCss) ?
-    `<link rel='stylesheet' href='http://localhost:8080/dist/style.css'>` :
+    //`<link rel='stylesheet' href='http://localhost:8080/dist/style.css'>` :
+    `<link rel="stylesheet" href="${ assetUrl }/dist/style.css">` :
     '';
 
   app.use(function *() {
@@ -44,7 +45,7 @@ function run(externalCss) {
                   <script>
                     var dataStore = {};
                   </script>
-                  <script src="http://localhost:8080/dist/client.js"></script>
+                  <script src="${ assetUrl }/dist/client.js"></script>
               </html>`
           );
           callback(null);

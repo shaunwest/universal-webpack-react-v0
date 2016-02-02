@@ -6,7 +6,7 @@ var externalCss = args.linkcss;
 var BABEL_PRESETS = ['es2015', 'react', 'stage-0'],
     APP_ROOT = '..';
 
-function babelServer() {
+function babelServer(externalCss, assetUrl) {
     console.log(format.activity('Starting dev server'));
 
     global.__SERVER__ = true;
@@ -17,7 +17,7 @@ function babelServer() {
             only: /src/,
             presets: BABEL_PRESETS
         });
-        require(APP_ROOT + '/src/server')(externalCss);
+        require(APP_ROOT + '/src/server')(externalCss, assetUrl);
     }
     catch (error) {
         console.error(error.stack);

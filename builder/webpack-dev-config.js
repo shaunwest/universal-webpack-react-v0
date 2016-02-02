@@ -1,27 +1,22 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var path = require('path');
-
 var APP_ROOT = path.join(__dirname,  '/../');
 
 module.exports = {
     target: 'web',
     cache: true,
     context: APP_ROOT,
-    devtool: false,
-    entry: ['./src/client'], // TODO: one entry for app, one for css, and one for libs
+    devtool: 'source-map',
+    entry: ['./src/client'],
     output: {
         path: path.join(APP_ROOT, 'static/dist'),
         filename: 'client.js',
-        //chunkFilename: '[name].[id].js',
-        publicPath: 'dist/'
+        publicPath: 'dist/',
+        sourceMapFilename: '[file].map'
     },
     plugins: [
         new webpack.DefinePlugin({ __SERVER__: false }),
-        //new webpack.DefinePlugin({ 'process.env': {NODE_ENV: '\'prod\''} }),
-        new webpack.optimize.DedupePlugin(),
-        //new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.optimize.UglifyJsPlugin(),
         new ExtractTextPlugin('style.css')
     ],
     module: {

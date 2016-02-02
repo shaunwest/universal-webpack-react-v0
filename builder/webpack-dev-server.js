@@ -16,7 +16,7 @@ function runWebpackCompile(cb) {
                 cb(err, stats);
             }
             else {
-                console.log('Webpack compile complete.');
+                console.log('Webpack compile complete');
             }
         });
 }
@@ -58,8 +58,9 @@ function runWebpackServer(options, cb) {
         contentBase: '../static',
         inline: true,
         // webpack-dev-middleware options
+        // FIXME: errors don't show on CLI in quite mode
         quiet: true, // false = output stuff to console
-        noInfo: true, // false = output *boring* stuff to console 
+        noInfo: false, // false = output *boring* stuff to console 
         filename: 'client.js',
         watchOptions: {
             aggregateTimeout: 300,
@@ -87,7 +88,7 @@ function start(options, onCompiled, onListening) {
             runWebpackServer(options, onListening);
         }
         catch(error) {
-            console.log(format.warn('We\'re not gonna be able to watch for changes because of an error with webpack-dev-server.js.'));
+            console.log(format.warn('We\'re not gonna be able to watch for changes because of an error with webpack-dev-server.js'));
             console.log(format.warn(error.stack));
         }
     }

@@ -1,3 +1,6 @@
+
+@import 'foobar';
+
 body {
-  background: blue;
+  background: $fooColor;
 }

@@ -9,7 +9,7 @@ module.exports = {
     cache: true,
     context: APP_ROOT,
     devtool: false,
-    entry: ['./src/client'],
+    entry: ['./src/client'], // TODO: one entry for app, one for css, and one for libs
     output: {
         path: path.join(APP_ROOT, 'static/dist'),
         filename: 'client.js',

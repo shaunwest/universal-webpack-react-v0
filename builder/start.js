@@ -24,7 +24,7 @@ else {
     // Show a banner!
     banner();
 
-    console.log(format.success('Hello! Hit Ctrl+C to exit at any time.'));
+    console.log(format.success('Hello! Hit Ctrl+C to exit at any time'));
 
     if (externalCss) {
         console.log(format.link('External CSS linking is active.'));

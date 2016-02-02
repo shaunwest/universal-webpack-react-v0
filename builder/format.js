@@ -27,7 +27,7 @@ module.exports = {
         return colors.yellow(EMOJI_WARN + ' ' + msg);
     },
     go: function (msg) {
-        return colors.bold.magenta(EMOJI_GO + ' ' + msg);
+        return EMOJI_GO + ' ' + msg;
     },
     link: function (msg) {
         return EMOJI_LINK + ' ' + msg;

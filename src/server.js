@@ -5,6 +5,8 @@ import serve from 'koa-static';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
+import colors from 'colors';
+
 import format from '../builder/format';
 import foo from './foo';
 
@@ -49,7 +51,7 @@ function run(externalCss) {
       });
   });
 
-  app.listen(port, () => console.log(format.go('Server is listening @ http://%s:%s'), hostname, port));
+  app.listen(port, () => console.log(format.go(colors.magenta('Server is listening @ ') + colors.bold.magenta('http://%s:%s')), hostname, port));
 }
 
 module.exports = run;

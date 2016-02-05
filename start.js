@@ -6,7 +6,6 @@
 var colors = require('colors');
 var args = require('./builder/args.js')(process.argv);
 var start = require('./builder');
-
 var banner = require('./banner.js');
 
 function startProd() {

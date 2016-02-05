@@ -2,16 +2,15 @@ var WebpackDevServer = require('webpack-dev-server');
 var webpack = require('webpack');
 var fs = require('fs');
 var env = require('./env.js');
-var format = require('./format.js');
 
 function runWebpackCompile(options, cb) {
-    console.log(format.activity('Compiling'));
+    console.activity('Compiling');
     webpack(options.config)
         .run(function(err, stats) {
             if (cb) {
                 cb(err, stats);
             }
-            console.log(format.success('Compile finished'));
+            console.success('Compile finished');
         });
 }
 
@@ -28,7 +27,7 @@ function runWebpackServer(options, cb) {
         };
     }
 
-    console.log(format.activity('Compiling'));
+    console.activity('Compiling');
 
     serverCompiler = webpack(options.config);
 
@@ -50,7 +49,7 @@ function runWebpackServer(options, cb) {
     });
 
     server.listen(env.watchServerPort, env.watchServerHostname, function(err) {
-        console.log(format.success('Compile finished'));
+        console.success('Compile finished');
 
         if (cb) {
             cb(err, env.watchServerHostname, env.watchServerPort);

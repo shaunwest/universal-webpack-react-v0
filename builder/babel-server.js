@@ -1,6 +1,5 @@
-var format = require('./format.js');
 var args = require('./args.js')(process.argv);
-
+var xconsole = require('./console.js');
 var webpackHostname = process.env.WEBPACK_HOSTNAME || 'localhost';
 var webpackPort = process.env.WEBPACK_PORT || 1335;
 var assetUrlArg = 'http://' + webpackHostname + ':' + webpackPort;
@@ -10,9 +9,11 @@ var externalCssArg = args.linkcss;
 var BABEL_PRESETS = ['es2015', 'react', 'stage-0'];
 
 function babelServer(externalCss, assetUrl) {
+    xconsole();
+
     assetUrl = (typeof assetUrl === 'undefined') ? assetUrlArg : assetUrl;
 
-    console.log(format.activity('Starting server'));
+    console.activity('Starting server');
 
     global.__SERVER__ = true;
 

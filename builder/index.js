@@ -4,7 +4,8 @@
 
 var colors = require('colors');
 var webpackBuilder = require('./builder.js');
-var format = require('./format.js');
+
+require('./console.js')();
 
 // We're in server mode
 global.__SERVER__ = true;
@@ -18,7 +19,7 @@ function startProd(options) {
         config: config
     }, function onReady(err) {
         if (err) {
-            console.log(format.warn(error.stack));
+            console.warn(error.stack);
         }
         else {
             require('./babel-server.js')(EXTERNAL_CSS, ASSET_URL);
@@ -32,14 +33,14 @@ function startDev(options) {
         loud = options.loud;
 
     // Show some useful messaging
-    console.log(format.success('Hello! Hit Ctrl+C to exit at any time'));
+    console.success('Hello! Hit Ctrl+C to exit at any time');
 
     if (externalCss) {
-        console.log(format.link('External CSS linking is active'));
+        console.link('External CSS linking is active');
     }
 
     if (loud) {
-        console.log(format.verbose('Loud mode active'));
+        console.verbose('Loud mode active');
     }
 
     // Start the webpack dev server
@@ -50,7 +51,7 @@ function startDev(options) {
     },
     function onReady(err) {
         if (err) {
-            console.log(format.warn(error.stack));
+            console.warn(error.stack);
         }
         else {
             // Spawn a new babel server process
@@ -64,7 +65,8 @@ function startDev(options) {
     });
 }
 
+
 module.exports = {
-  prod: startProd,
-  dev: startDev
+    prod: startProd,
+    dev: startDev
 };

@@ -7,7 +7,6 @@ import ReactDOM from 'react-dom/server';
 
 import colors from 'colors';
 
-import format from '../format';
 import foo from './foo';
 
 const app = koa();
@@ -52,7 +51,7 @@ function run(externalCss, assetUrl = 'http://localhost:1335') {
       });
   });
 
-  app.listen(port, () => console.log(format.go(colors.magenta('Server is listening @ ') + colors.bold.magenta('http://%s:%s')), hostname, port));
+  app.listen(port, () => console.go(colors.magenta('Server is listening @ ') + colors.bold.magenta('http://%s:%s'), hostname, port));
 }
 
 module.exports = run;

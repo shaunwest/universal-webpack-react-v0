@@ -1,8 +1,8 @@
 {
-  "name": "universal-webpack-react-redux",
+  "name": "universal-webpack-react",
   "version": "1.0.0",
-  "description": "Universal Webpack React Redux",
-  "main": "builder/start.js",
+  "description": "Universal Webpack React",
+  "main": "start.js",
   "scripts": {
     "start": "BABEL_CACHE_PATH=\"./.babel-cache.json\" NODE_PATH=\"./src\" node ./start",
     "deploy": "BABEL_CACHE_PATH=\"./.babel-cache.json\" NODE_PATH=\"./src\" NODE_ENV=\"production\" node ./start"

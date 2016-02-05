@@ -7,8 +7,7 @@ var assetUrlArg = 'http://' + webpackHostname + ':' + webpackPort;
 
 var externalCssArg = args.linkcss;
 
-var BABEL_PRESETS = ['es2015', 'react', 'stage-0'],
-    APP_ROOT = '..';
+var BABEL_PRESETS = ['es2015', 'react', 'stage-0'];
 
 function babelServer(externalCss, assetUrl) {
     assetUrl = (typeof assetUrl === 'undefined') ? assetUrlArg : assetUrl;
@@ -23,7 +22,8 @@ function babelServer(externalCss, assetUrl) {
             only: /src/,
             presets: BABEL_PRESETS
         });
-        require(APP_ROOT + '/src/server')(externalCss || externalCssArg, assetUrl);
+        // TODO: do this with a callback?
+        require('../src/server')(externalCss || externalCssArg, assetUrl);
     }
     catch (error) {
         console.error(error.stack);

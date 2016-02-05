@@ -4,35 +4,42 @@
  */
 
 var colors = require('colors');
-var format = require('./format.js');
-var banner = require('./banner.js');
-var args = require('./args.js')(process.argv);
+var format = require('./builder/format.js');
+var args = require('./builder/args.js')(process.argv);
+var webpackBuilder = require('./builder/index.js');
 
-var APP_ROOT = '..';
+var banner = require('./banner.js');
 
 // We're in server mode
 global.__SERVER__ = true;
 
 function startProd() {
-    var webpackProd;
+    var config = require('./builder/webpack-prod-config.js');
 
     console.log('     PROD MODE     '.bgRed);
     console.log('');
 
-    webpackProd = require('./webpack-prod.js');
-    webpackProd(function () {
-        require('./babel-server.js')(true, '');
+    webpackBuilder.compile({
+      config: config
+    }, function onReady(err) {
+        if (err) {
+            console.log(format.warn(error.stack));
+        }
+        else {
+            require('./builder/babel-server.js')(true, '');
+        }
     });
 }
 
 function startDev() {
-    var devServer,
-      externalCss = args.linkcss,
-      loud = args.loud;
+    var config = require('./builder/webpack-dev-config.js'),
+        externalCss = args.linkcss,
+        loud = args.loud;
 
     // Show a banner!
     banner();
 
+    // Show some useful messaging
     console.log(format.success('Hello! Hit Ctrl+C to exit at any time'));
 
     if (externalCss) {
@@ -44,33 +51,25 @@ function startDev() {
     }
 
     // Start the webpack dev server
-    devServer = require(APP_ROOT + '/builder/webpack-dev.js');
-
-    if (devServer) {
-        devServer({
-            externalCss: externalCss,
-            loud: loud
-        },
-        function onCompile() {
-            console.log(format.success('Compile finished'));
-
+    webpackBuilder.watch({
+        config: config,
+        externalCss: externalCss,
+        loud: loud
+    },
+    function onReady(err) {
+        if (err) {
+            console.log(format.warn(error.stack));
+        }
+        else {
             // Spawn a new babel server process
-            // Piping will watch for changes and relaunch the server
+            // "Piping" will watch for changes and relaunch the server
             require('piping')({
                 main: './builder/start-babel-server.js',
                 hook: true,
                 includeModules: false
             });
-        },
-        function onWatching(err) {
-            if (err) {
-              console.log(err);
-            }
-            else {
-              console.log(format.success('Watching for changes'));
-            }
-        });
-    }
+        }
+    });
 }
 
 if (process.env.NODE_ENV === 'production') {

@@ -4,7 +4,7 @@ export default class Foo extends React.Component {
   render() {
     return(
       <ul>
-      <li>FOOO!!!</li>
+      <li>FOOO!!!!</li>
       </ul>
     );
   }

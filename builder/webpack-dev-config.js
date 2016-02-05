@@ -1,35 +1,19 @@
 var webpack = require('webpack');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var path = require('path');
-var APP_ROOT = path.join(__dirname,  '/../');
+var baseConfig = require('./webpack-base-config.js');
+var env = require('./env.js');
+var devConfig = Object.assign({}, baseConfig);
 
-module.exports = {
-    target: 'web',
-    cache: true,
-    context: APP_ROOT,
-    devtool: 'source-map',
-    entry: ['./src/client'],
-    output: {
-        path: path.join(APP_ROOT, 'static/dist'),
-        filename: 'client.js',
-        publicPath: 'dist/',
-        sourceMapFilename: '[file].map'
-    },
-    plugins: [
-        new webpack.DefinePlugin({ __SERVER__: false }),
-        new ExtractTextPlugin('style.css')
-    ],
-    module: {
-        loaders: [
-            { test: /\.scss$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader!sass-loader") },
-            { test: /\.json$/, loaders: ['json'] },
-            { test: /\.js$/, loaders: ['babel?cacheDirectory&presets[]=es2015&presets[]=react&presets[]=stage-0'], exclude: /node_modules/ }
-        ],
-        postLoaders: [],
-        noParse: /\.min\.js/
-    },
-    node: {
-        __dirname: true,
-        fs: 'empty'
-    }
-};
+// TODO: rename to watch config?
+
+devConfig.debug = true;
+devConfig.entry.unshift(
+    'webpack-dev-server/client?' + env.watchServerUrl,
+    'webpack/hot/dev-server'
+);
+devConfig.output.publicPath = env.watchServerUrl + '/dist/';
+devConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+devConfig.module.postLoaders.push(
+    { test: /\.js$/, loaders: ['react-hot'], exclude: /node_modules/ }
+);
+
+module.exports = devConfig;

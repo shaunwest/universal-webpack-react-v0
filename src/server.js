@@ -13,14 +13,14 @@ import foo from './foo';
 const app = koa();
 const hostname = process.env.HOSTNAME || 'localhost';
 const port = process.env.PORT || 1336;
+
 const appRoot = __dirname + '/..';
 
-function run(externalCss, assetUrl = 'http://localhost:8080') {
+function run(externalCss, assetUrl = 'http://localhost:1335') {
   app.use(serve(appRoot + '/static', { defer: false }));
   app.use(koaBody({ multipart: true }));
 
   const cssLink = (externalCss) ?
-    //`<link rel='stylesheet' href='http://localhost:8080/dist/style.css'>` :
     `<link rel="stylesheet" href="${ assetUrl }/dist/style.css">` :
     '';
 
@@ -39,7 +39,7 @@ function run(externalCss, assetUrl = 'http://localhost:8080') {
                       ${ cssLink }
                   </head>
                   <body>
-                      <h1>Hello!!</h1>
+                      <h1>Hello!!!</h1>
                       <div id='react-root'>${ reactString }</div>
                   </body>
                   <script>

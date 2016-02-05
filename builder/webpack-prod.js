@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 var format = require('./format.js');
 
-var config = require('./webpack-dev-config.js');
+var config = require('./webpack-prod-config.js');
 
 function runWebpackCompile(cb) {
     console.log(format.activity('Compiling'));

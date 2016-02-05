@@ -1,65 +1,70 @@
-var WebpackDevServer = require('webpack-dev-server');
-var webpack = require('webpack');
-var format = require('./format.js');
-var env = require('./env.js');
+/*
+ * index.js
+ */
 
-function runWebpackCompile(options, cb) {
-    console.log(format.activity('Compiling'));
-    webpack(options.config)
-        .run(function(err, stats) {
-            if (cb) {
-                cb(err, stats);
-            }
-            console.log(format.success('Compile finished'));
-        });
+var colors = require('colors');
+var webpackBuilder = require('./builder.js');
+var format = require('./format.js');
+
+// We're in server mode
+global.__SERVER__ = true;
+
+function startProd(options) {
+    var config = require('./webpack-prod-config.js'),
+        EXTERNAL_CSS = true,
+        ASSET_URL = '';
+
+    webpackBuilder.compile({
+        config: config
+    }, function onReady(err) {
+        if (err) {
+            console.log(format.warn(error.stack));
+        }
+        else {
+            require('./babel-server.js')(EXTERNAL_CSS, ASSET_URL);
+        }
+    });
 }
 
-function runWebpackServer(options, cb) {
-    var server, serverCompiler,
-      noInfo = !options.loud;
-    
-    // If not linking external css, use the webpack import method
-    // (which will hotload css changes)
-    if (!options.externalCss) {
-        options.config.module.loaders[0] = {
-          test: /\.scss$/,
-          loaders: ['style', 'css', 'sass']
-        };
+function startDev(options) {
+    var config = require('./webpack-dev-config.js'),
+        externalCss = options.externalCss,
+        loud = options.loud;
+
+    // Show some useful messaging
+    console.log(format.success('Hello! Hit Ctrl+C to exit at any time'));
+
+    if (externalCss) {
+        console.log(format.link('External CSS linking is active'));
     }
 
-    console.log(format.activity('Compiling'));
+    if (loud) {
+        console.log(format.verbose('Loud mode active'));
+    }
 
-    serverCompiler = webpack(options.config);
-
-    server = new WebpackDevServer(serverCompiler, {
-        hot: true,
-        contentBase: '../static',
-        inline: true,
-        quiet: false, // true = don't output anything to console, false = output it
-        noInfo: noInfo, // hide output except for errors (?)
-        filename: 'client.js',
-        watchOptions: {
-            aggregateTimeout: 200,
-            poll: 500
-        },
-        publicPath: env.watchServerUrl + '/dist/',
-        headers: {'Access-Control-Allow-Origin': '*'},
-        stats: { colors: true },
-        host: env.watchServerHostname
-    });
-
-    server.listen(env.watchServerPort, env.watchServerHostname, function(err) {
-        console.log(format.success('Compile finished'));
-
-        if (cb) {
-            cb(err, env.watchServerHostname, env.watchServerPort);
-        } else {
-            console.log('Webpack Server listening @ http://' + env.watchServerUrl);
+    // Start the webpack dev server
+    webpackBuilder.watch({
+        config: config,
+        externalCss: externalCss,
+        loud: loud
+    },
+    function onReady(err) {
+        if (err) {
+            console.log(format.warn(error.stack));
+        }
+        else {
+            // Spawn a new babel server process
+            // "piping" will watch for changes and relaunch the server
+            require('piping')({
+                main: './builder/start-babel-server.js',
+                hook: true,
+                includeModules: false
+            });
         }
     });
 }
 
 module.exports = {
-  compile: runWebpackCompile,
-  watch: runWebpackServer  
+  prod: startProd,
+  dev: startDev
 };

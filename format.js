@@ -1,13 +1,13 @@
 var colors = require('colors');
 
-var EMOJI_ACTIVITY = '-->',
-    EMOJI_SUCCESS = '-->',
-    EMOJI_ERROR = '-->',
-    EMOJI_WARN = '-->',
-    EMOJI_GO = '-->',
-    EMOJI_VERBOSE = '-->',
-    EMOJI_GENERIC = '-->',
-    EMOJI_LINK = '-->';
+var EMOJI_ACTIVITY = '⌛ ',
+    EMOJI_SUCCESS = '😸 ',
+    EMOJI_ERROR = '🙀 ',
+    EMOJI_WARN = '😿 ',
+    EMOJI_GO = '👉 ',
+    EMOJI_VERBOSE = '📢 ',
+    EMOJI_GENERIC = '😼 ',
+    EMOJI_LINK = '🔗 ';
  
 module.exports = {
     EMOJI_ACTIVITY: EMOJI_ACTIVITY,

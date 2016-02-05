@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom/server';
 
 import colors from 'colors';
 
-import format from '../builder/format';
+import format from '../format';
 import foo from './foo';
 
 const app = koa();

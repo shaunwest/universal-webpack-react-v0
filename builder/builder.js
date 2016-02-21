@@ -40,7 +40,7 @@ function runWebpackServer(options, cb) {
         filename: 'client.js',
         watchOptions: {
             aggregateTimeout: 200,
-            poll: 500
+            poll: 100
         },
         publicPath: env.watchServerUrl + '/dist/',
         headers: {'Access-Control-Allow-Origin': '*'},

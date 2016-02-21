@@ -23,7 +23,7 @@ function babelServer(externalCss, assetUrl) {
             only: /src/,
             presets: BABEL_PRESETS
         });
-        // TODO: do this with a callback?
+        // TODO: how can this path be made configurable??
         require('../src/server')(externalCss || externalCssArg, assetUrl);
     }
     catch (error) {

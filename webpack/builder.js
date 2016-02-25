@@ -1,10 +1,10 @@
-var WebpackDevServer = require('webpack-dev-server');
-var webpack = require('webpack');
-var fs = require('fs');
-var env = require('./env.js');
+import WebpackDevServer from 'webpack-dev-server';
+import webpack from 'webpack';
+import env from './env';
 
-function runWebpackCompile(options, cb) {
+export function compile(options, cb) {
     console.activity('Compiling');
+
     webpack(options.config)
         .run(function(err, stats) {
             if (cb) {
@@ -14,9 +14,8 @@ function runWebpackCompile(options, cb) {
         });
 }
 
-function runWebpackServer(options, cb) {
-    var server, serverCompiler,
-      noInfo = !options.loud;
+export function watch(options, cb) {
+    const noInfo = !options.loud;
     
     // If not linking external css, use the webpack import method
     // (which will hotload css changes)
@@ -29,9 +28,9 @@ function runWebpackServer(options, cb) {
 
     console.activity('Compiling');
 
-    serverCompiler = webpack(options.config);
+    const serverCompiler = webpack(options.config);
 
-    server = new WebpackDevServer(serverCompiler, {
+    const server = new WebpackDevServer(serverCompiler, {
         hot: true,
         contentBase: '../static',
         inline: true,
@@ -48,8 +47,8 @@ function runWebpackServer(options, cb) {
         host: env.watchServerHostname
     });
 
-    server.listen(env.watchServerPort, env.watchServerHostname, function(err) {
-        console.success('Compile finished');
+    server.listen(env.watchServerPort, env.watchServerHostname, err => {
+        console.success('Compile finished. One moment...');
 
         if (cb) {
             cb(err, env.watchServerHostname, env.watchServerPort);
@@ -58,8 +57,3 @@ function runWebpackServer(options, cb) {
         }
     });
 }
-
-module.exports = {
-  compile: runWebpackCompile,
-  watch: runWebpackServer  
-};

@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import './style.scss';
+import './sass/style.scss';
 
-import foo from './foo';
+import foo from './lib/foo';
 
 const reactRoot = window.document.getElementById('react-root');
 

@@ -4,33 +4,26 @@
  */
 
 var colors = require('colors');
-var args = require('./builder/args.js')(process.argv);
-var start = require('./builder');
+var args = require('./webpack/args.js')(process.argv);
+var start = require('./webpack');
 var banner = require('./banner.js');
 
-function startProd() {
+start.prod(function () {
     console.log('     PROD MODE     '.bgRed);
     console.log('');
 
-    start.prod();
-}
+    return {};
+});
 
-function startDev() {
+start.dev(function () {
     var externalCss = args.linkcss,
         loud = args.loud;
 
     // Show a banner!
     banner();
 
-    start.dev({
+    return {
         externalCss: externalCss,
         loud: loud
-    });
-}
-
-if (process.env.NODE_ENV === 'production') {
-    startProd();
-}
-else {
-    startDev();
-}
+    };
+});

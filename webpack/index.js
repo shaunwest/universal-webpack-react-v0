@@ -1,19 +1,50 @@
 /*
  * index.js
+ *
+ * This is the main entry point into the webpack build system
  */
 
+var BABEL_PRESETS = ['es2015', 'react', 'stage-0'];
+
+// Enable ES2015 (on build modules used require() below)
+require('babel-polyfill');
+require('babel-core/register')({
+    presets: BABEL_PRESETS
+});
+
+// Colorful console output
 var colors = require('colors');
+
+// Builder.js is a custom wrapper for webpack
 var webpackBuilder = require('./builder.js');
 
+// Console logging helper functions
 require('./console.js')();
 
-// We're in server mode
-global.__SERVER__ = true;
+// This is determined by the NODE_ENV CLI variable
+// e.g. NODE_ENV="production" node ./my-script"
+function isProd() {
+    return process.env.NODE_ENV === 'production';
+}
 
+// Register options for the prod build
+function prod(cb) {
+    if (isProd()) {
+        startProd(cb());
+    }
+}
+
+// Register options for the dev build
+function dev(cb) {
+    if (!isProd()) {
+        startDev(cb());
+    }
+}
+
+// Run a prod build
 function startProd(options) {
     var config = require('./webpack-prod-config.js'),
-        EXTERNAL_CSS = true,
-        ASSET_URL = '';
+        EXTERNAL_CSS = true;
 
     webpackBuilder.compile({
         config: config
@@ -22,13 +53,14 @@ function startProd(options) {
             console.warn(error.stack);
         }
         else {
-            require('./babel-server.js')(EXTERNAL_CSS, ASSET_URL);
+            require('./babel-server.js')(EXTERNAL_CSS);
         }
     });
 }
 
+// Run a dev build (which automatically watches)
 function startDev(options) {
-    var config = require('./webpack-dev-config.js'),
+    var config = require('./webpack-watch-config.js'),
         externalCss = options.externalCss,
         loud = options.loud;
 
@@ -57,7 +89,7 @@ function startDev(options) {
             // Spawn a new babel server process
             // "piping" will watch for changes and relaunch the server
             require('piping')({
-                main: './builder/start-babel-server.js',
+                main: './webpack/start-babel-server.js',
                 hook: true,
                 includeModules: false
             });
@@ -65,8 +97,7 @@ function startDev(options) {
     });
 }
 
-
 module.exports = {
-    prod: startProd,
-    dev: startDev
+    prod: prod,
+    dev: dev
 };

@@ -34,6 +34,7 @@
     "babel-loader": "^6.2.1",
     "colors": "^1.1.2",
     "css-loader": "^0.23.1",
+    "deepcopy": "^0.6.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "node-sass": "^3.4.2",
     "piping": "^0.3.0",

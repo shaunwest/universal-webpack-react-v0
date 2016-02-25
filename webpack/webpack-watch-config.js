@@ -1,7 +1,10 @@
-var webpack = require('webpack');
-var baseConfig = require('./webpack-base-config.js');
-var env = require('./env.js');
-var watchConfig = Object.assign({}, baseConfig);
+import webpack from 'webpack';
+import deepcopy from 'deepcopy';
+
+import baseConfig from './webpack-base-config.js';
+import env from './env.js';
+
+const watchConfig = deepcopy(baseConfig);
 
 watchConfig.debug = true;
 watchConfig.entry.unshift(

@@ -14,16 +14,23 @@ const hostname = process.env.HOSTNAME || 'localhost';
 const port = process.env.PORT || 1336;
 const webpackHostname = process.env.WEBPACK_HOSTNAME || 'localhost';
 const webpackPort = process.env.WEBPACK_PORT || 1335;
-const assetUrl = 'http://' + webpackHostname + ':' + webpackPort;
+
 const staticDir = __dirname + '/../static';
 
-function run(externalCss) {
-    app.use(serve(staticDir, { defer: false }));
-    app.use(koaBody({ multipart: true }));
+function run(devMode, externalCss) {
+    const assetUrl = devMode ? 'http://' + webpackHostname + ':' + webpackPort : '';
+    let cssLink;
 
-    const cssLink = (externalCss) ?
+    if (devMode) {
+      cssLink = (externalCss) ?
         `<link rel="stylesheet" href="${ assetUrl }/dist/style.css">` :
         '';
+    } else {
+      cssLink = `<link rel="stylesheet" href="/dist/style.css">`;
+    } 
+
+    app.use(serve(staticDir, { defer: false }));
+    app.use(koaBody({ multipart: true }));
 
     app.use(function *() {
         yield (callback => {

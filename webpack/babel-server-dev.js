@@ -4,4 +4,5 @@
  * this will require babel-server and run it
  */
 
-require('./babel-server.js')();
+require('./console.js')();
+require('./babel-server.js')(true);

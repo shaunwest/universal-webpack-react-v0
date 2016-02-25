@@ -1,6 +1,9 @@
-var webpack = require('webpack');
-var baseConfig = require('./webpack-base-config.js');
-var prodConfig = Object.assign({}, baseConfig);
+import webpack from 'webpack';
+import deepcopy from 'deepcopy';
+
+import baseConfig from './webpack-base-config.js';
+
+const prodConfig = deepcopy(baseConfig);
 
 prodConfig.devTool = false;
 // TODO: what about css minification?

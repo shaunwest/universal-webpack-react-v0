@@ -3,27 +3,23 @@
  * this is the master script for making and watching builds
  */
 
-var colors = require('colors');
-var args = require('./webpack/args.js')(process.argv);
-var start = require('./webpack');
-var banner = require('./banner.js');
+const colors = require('colors'),
+    util = require('./webpack/util.js'),
+    start = require('./webpack');
 
-start.prod(function () {
-    console.log('     PROD MODE     '.bgRed);
-    console.log('');
+start.prod(() => {
+    console.log(`             ${ colors.bold.bgRed('    PROD MODE    ') }
+    `); 
 
     return {};
 });
 
-start.dev(function () {
-    var externalCss = args.linkcss,
-        loud = args.loud;
-
-    // Show a banner!
-    banner();
+start.dev(() => {
+    console.log(`         ${ colors.bold.bgMagenta(' UNIVERSAL/WEBPACK/REACT ') }
+    `); 
 
     return {
-        externalCss: externalCss,
-        loud: loud
+        externalCss: util.arg('linkcss'),
+        verbose: util.arg('verbose')
     };
 });

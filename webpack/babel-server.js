@@ -1,20 +1,19 @@
-var args = require('./args.js')(process.argv);
-var externalCss = args.linkcss;
-
-var BABEL_PRESETS = ['es2015', 'react', 'stage-0'];
+const util = require('./util.js');
+const BABEL_PRESETS = ['es2015', 'react', 'stage-0'];
 
 function babelServer(devMode) {
-    console.activity('Starting server');
+    console.info('-> Starting server...');
 
     global.__SERVER__ = true;
 
     try {
+        // Enable full ES2015 support on the server side
         require('babel-polyfill');
         require('babel-core/register')({
-            only: /src/,
+            only: /server|client|shared/,
             presets: BABEL_PRESETS
         });
-        require('../src/server')(devMode, externalCss);
+        require('../server/server.js')(devMode, util.arg('linkcss'));
     }
     catch (error) {
         console.error(error.stack);

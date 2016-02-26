@@ -1,8 +1,12 @@
-import webpack from 'webpack';
-import deepcopy from 'deepcopy';
+/*
+ * webpack-prod-config.js
+ *
+ * This config is a production worthy modification of the base config.
+ */
 
-import baseConfig from './webpack-base-config.js';
-
+const webpack = require('webpack');
+const deepcopy = require('deepcopy');
+const baseConfig = require('./webpack-base-config.js');
 const prodConfig = deepcopy(baseConfig);
 
 prodConfig.devTool = false;

@@ -1,8 +1,16 @@
-import webpack from 'webpack';
-import deepcopy from 'deepcopy';
+/*
+ * webpack-watch-config.js
+ *
+ * This config is a modification of the base config
+ * intended for development. Mainly it sets up hot
+ * module replacement.
+ */
 
-import baseConfig from './webpack-base-config.js';
-import env from './env.js';
+const webpack = require('webpack');
+const deepcopy = require('deepcopy');
+
+const baseConfig = require('./webpack-base-config.js');
+const env = require('./env.js');
 
 const watchConfig = deepcopy(baseConfig);
 

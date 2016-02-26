@@ -1,8 +1,9 @@
 /*
- * start-babel-server.js
+ * babel-server-dev.js
  *
- * this will require babel-server and run it
+ * This requires babel-server and runs it in dev mode.
+ * (dev mode makes the server aware of the webpack dev server
+ * which handles hot loading)
  */
 
-require('./console.js')();
 require('./babel-server.js')(true);

@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import './sass/style.scss';
+import '../shared/sass/style.scss';
 
-import foo from './lib/foo';
+import Main from '../shared/js/main';
 
 const reactRoot = window.document.getElementById('react-root');
 
-ReactDOM.render(React.createElement(foo), reactRoot);
+ReactDOM.render(React.createElement(Main), reactRoot);

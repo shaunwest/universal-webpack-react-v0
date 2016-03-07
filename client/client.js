@@ -1,10 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-
+import { render } from 'react-dom';
 import '../shared/sass/style.scss';
-
-import Main from '../shared/js/main';
+import Router from '../shared/js/router';
 
 const reactRoot = window.document.getElementById('react-root');
 
-ReactDOM.render(React.createElement(Main), reactRoot);
+render(Router, reactRoot);

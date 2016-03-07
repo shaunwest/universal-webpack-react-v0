@@ -6,6 +6,16 @@ import colors from 'colors';
 import env from '../webpack/env.js';
 import buildIndex from './index';
 
+import React from 'react';
+//import ReactDOM from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
+
+import { match, RouterContext } from 'react-router';
+//import createLocation from 'history/lib/createLocation';
+//import createMemoryHistory from 'history/lib/createMemoryHistory';
+
+import { routes } from '../shared/js/routes';
+
 const app = koa();
 const staticDir = __dirname + '/../static';
 
@@ -25,15 +35,24 @@ function run(devMode, externalCss) {
     app.use(koaBody({ multipart: true }));
 
     app.use(function *() {
+        //createLocation(this.path);
+        //const history = createHistory();
+        //const loc = history.createLocation(this.path);
+        //const history = createMemoryHistory();
+        //console.log(loc);
         yield (callback => {
-            this.type = 'text/html';
-            this.body = buildIndex(cssLink, assetUrl);
-            callback(null);
+            match({ routes: routes, location: this.path }, (error, redirect, props) => {
+                //props.history = history;
+                this.type = 'text/html';
+                const reactString = renderToString(<RouterContext {...props} />);
+                this.body = buildIndex(reactString, cssLink, assetUrl);
+                callback(null);
+            });
         });
     });
 
     app.listen(env.port, () => 
-      console.info(`👉  ${ colors.magenta('Server is listening @') } ${ colors.bold.magenta('http://%s:%s') }`, env.hostname, env.port)
+        console.info(`👉  ${ colors.magenta('Server is listening @') } ${ colors.bold.magenta('http://%s:%s') }`, env.hostname, env.port)
     );
 }
 
